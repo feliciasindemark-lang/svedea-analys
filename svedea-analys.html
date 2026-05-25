@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Svedea — Varumärkesanalys</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy: #0a1628;
+  --navy-mid: #152340;
+  --blue: #005073;
+  --blue-light: #1a7fa8;
+  --accent: #e8a838;
+  --accent-light: #f5c96a;
+  --cream: #f7f4ef;
+  --cream-dark: #ede8e0;
+  --text: #1a1a2e;
+  --text-muted: #5a6478;
+  --white: #ffffff;
+  --green: #2d8c5e;
+  --red: #c0392b;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* HERO */
+.hero {
+  background: var(--navy);
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,80,115,0.4) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,168,56,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-nav {
+  padding: 2rem 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: relative; z-index: 2;
+}
+
+.hero-nav .byline {
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.hero-nav .date {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.3);
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem;
+  position: relative; z-index: 2;
+}
+
+.hero-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  color: var(--white);
+  line-height: 1.05;
+  max-width: 800px;
+  margin-bottom: 1.5rem;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent-light);
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.55);
+  max-width: 500px;
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.hero-footer {
+  padding: 2rem 4rem;
+  display: flex;
+  gap: 3rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  position: relative; z-index: 2;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hero-stat .num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  color: var(--white);
+}
+
+.hero-stat .label {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+
+/* SCROLL INDICATOR */
+.scroll-hint {
+  position: absolute;
+  bottom: 5rem;
+  right: 4rem;
+  writing-mode: vertical-rl;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 2;
+}
+
+.scroll-hint::after {
+  content: '';
+  width: 1px;
+  height: 40px;
+  background: rgba(255,255,255,0.2);
+  animation: scrollline 1.5s ease-in-out infinite;
+}
+
+@keyframes scrollline {
+  0%, 100% { transform: scaleY(1); opacity: 0.3; }
+  50% { transform: scaleY(0.5); opacity: 0.8; }
+}
+
+/* SECTIONS */
+section {
+  padding: 6rem 4rem;
+}
+
+.section-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  margin-bottom: 0.75rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.section-intro {
+  font-size: 1rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+  font-weight: 300;
+}
+
+/* DIVIDER */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cream-dark), transparent);
+  margin: 0 4rem;
+}
+
+/* SKI SECTION */
+.ski-section {
+  background: var(--navy);
+  color: var(--white);
+}
+
+.ski-section .section-tag { color: var(--accent); }
+.ski-section .section-title { color: var(--white); }
+.ski-section .section-intro { color: rgba(255,255,255,0.5); }
+
+.ski-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 800px;
+}
+
+.ski-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 60px;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.ski-row.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.ski-row.highlight .ski-name { color: var(--accent-light); font-weight: 500; }
+
+.ski-name {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+  text-align: right;
+}
+
+.ski-bar-wrap {
+  height: 32px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.ski-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  width: 0;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.ski-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1));
+}
+
+.ski-row.highlight .ski-bar-fill {
+  background: linear-gradient(90deg, var(--blue-light), var(--accent));
+}
+
+.ski-bar-fill:not(.svedea-bar) {
+  background: rgba(255,255,255,0.2);
+}
+
+.ski-score {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.ski-row.highlight .ski-score { color: var(--accent-light); }
+
+.ski-avg-line {
+  position: relative;
+  max-width: 800px;
+  margin-top: 1rem;
+}
+
+.ski-avg-line::before {
+  content: 'Branschsnitt ~71';
+  position: absolute;
+  right: 62px;
+  top: -24px;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.25);
+}
+
+/* POSITIONING MAP */
+.map-section { background: var(--cream); }
+
+.position-map {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  aspect-ratio: 1;
+  border: 1px solid var(--cream-dark);
+  border-radius: 8px;
+  background: var(--white);
+}
+
+.map-axis-x, .map-axis-y {
+  position: absolute;
+  background: var(--cream-dark);
+}
+
+.map-axis-x {
+  width: 100%; height: 1px;
+  top: 50%; left: 0;
+}
+
+.map-axis-y {
+  width: 1px; height: 100%;
+  left: 50%; top: 0;
+}
+
+.map-label {
+  position: absolute;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.map-label.top { top: 1rem; left: 50%; transform: translateX(-50%); }
+.map-label.bottom { bottom: 1rem; left: 50%; transform: translateX(-50%); }
+.map-label.left { left: 1rem; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+.map-label.right { right: 1rem; top: 50%; transform: translateY(-50%) rotate(90deg); }
+
+.map-dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: default;
+}
+
+.map-dot-circle {
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.map-dot:hover .map-dot-circle { transform: scale(1.3); }
+
+.map-dot-label {
+  font-size: 0.7rem;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--text);
+  background: rgba(247,244,239,0.9);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.map-dot.svedea .map-dot-circle {
+  background: var(--blue);
+  box-shadow: 0 0 0 4px rgba(0,80,115,0.15);
+}
+
+.map-dot.svedea .map-dot-label {
+  color: var(--blue);
+  font-weight: 600;
+}
+
+/* CHANNEL ANALYSIS */
+.channel-section { background: var(--cream-dark); }
+
+.channel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+}
+
+.channel-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 1.75rem;
+  border: 1px solid rgba(0,0,0,0.06);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.channel-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.channel-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+.channel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.channel-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.channel-badge {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.badge-strong { background: #e8f5e9; color: #2d8c5e; }
+.badge-weak { background: #ffeee8; color: #c0392b; }
+.badge-ok { background: #fff8e1; color: #b7860a; }
+.badge-gap { background: #e8f0fe; color: #1a5fb4; }
+
+.channel-meter {
+  height: 4px;
+  background: var(--cream-dark);
+  border-radius: 2px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.channel-meter-fill {
+  height: 100%;
+  border-radius: 2px;
+  width: 0;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.channel-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* OPPORTUNITIES */
+.opp-section { background: var(--white); }
+
+.opp-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 960px;
+}
+
+.opp-card {
+  padding: 2rem;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.opp-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.opp-card:nth-child(1) { background: var(--navy); }
+.opp-card:nth-child(2) { background: var(--blue); }
+.opp-card:nth-child(3) { background: var(--cream-dark); }
+
+.opp-card:nth-child(1) .opp-num,
+.opp-card:nth-child(2) .opp-num { color: rgba(255,255,255,0.15); }
+.opp-card:nth-child(3) .opp-num { color: rgba(0,0,0,0.06); }
+
+.opp-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 5rem;
+  line-height: 1;
+  position: absolute;
+  top: 1rem; right: 1.5rem;
+  font-weight: 700;
+}
+
+.opp-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.opp-card:nth-child(1) .opp-tag { color: var(--accent); }
+.opp-card:nth-child(2) .opp-tag { color: rgba(255,255,255,0.5); }
+.opp-card:nth-child(3) .opp-tag { color: var(--blue-light); }
+
+.opp-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.opp-card:nth-child(1) .opp-title,
+.opp-card:nth-child(2) .opp-title { color: var(--white); }
+.opp-card:nth-child(3) .opp-title { color: var(--text); }
+
+.opp-text {
+  font-size: 0.82rem;
+  line-height: 1.7;
+  font-weight: 300;
+  position: relative;
+}
+
+.opp-card:nth-child(1) .opp-text,
+.opp-card:nth-child(2) .opp-text { color: rgba(255,255,255,0.6); }
+.opp-card:nth-child(3) .opp-text { color: var(--text-muted); }
+
+/* CLOSING */
+.closing {
+  background: var(--navy);
+  padding: 6rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.closing::before {
+  content: '';
+  position: absolute;
+  top: -150px; right: -150px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(232,168,56,0.1) 0%, transparent 70%);
+}
+
+.closing-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.closing h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  color: var(--white);
+  max-width: 600px;
+  line-height: 1.15;
+}
+
+.closing p {
+  color: rgba(255,255,255,0.45);
+  font-size: 0.9rem;
+  font-weight: 300;
+  max-width: 500px;
+  line-height: 1.7;
+}
+
+.closing-sig {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.closing-sig .name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: var(--white);
+  font-style: italic;
+}
+
+.closing-sig .contact {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.05em;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-tag { animation: fadeUp 0.6s ease 0.2s both; }
+.hero h1 { animation: fadeUp 0.6s ease 0.4s both; }
+.hero-sub { animation: fadeUp 0.6s ease 0.6s both; }
+.hero-footer { animation: fadeUp 0.6s ease 0.8s both; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-nav, .hero-content, .hero-footer, section, .closing { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .opp-grid { grid-template-columns: 1fr; }
+  .ski-row { grid-template-columns: 120px 1fr 50px; }
+  .hero-footer { flex-wrap: wrap; gap: 1.5rem; }
+  .divider { margin: 0 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <nav class="hero-nav">
+    <span class="byline">Felicia Sindemark — Kandidat CMO</span>
+    <span class="date">Maj 2026</span>
+  </nav>
+
+  <div class="hero-content">
+    <p class="hero-tag">Varumärkesanalys</p>
+    <h1>Svedea är en framgångssaga. <em>Nu gäller det att ta nästa steg.</em></h1>
+    <p class="hero-sub">En analys av Svedeas varumärkesposition, kommunikationsgap och tre konkreta prioriteringar för nästa tillväxtfas.</p>
+  </div>
+
+  <div class="hero-footer">
+    <div class="hero-stat">
+      <span class="num">430 000</span>
+      <span class="label">kunder</span>
+    </div>
+    <div class="hero-stat">
+      <span class="num">6×</span>
+      <span class="label">SKI-vinnare fordonsförsäkring</span>
+    </div>
+    <div class="hero-stat">
+      <span class="num">16 år</span>
+      <span class="label">som etablerad utmanare</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">Scrolla</div>
+</section>
+
+<!-- SKI SECTION -->
+<section class="ski-section">
+  <p class="section-tag">Kundnöjdhet — SKI 2024/2025</p>
+  <h2 class="section-title" style="color:white;">Svedea toppar. Men ingen vet om det.</h2>
+  <p class="section-intro">Svedea vinner SKI-mätningen för fordonsförsäkring år efter år och tog hem båtförsäkring direkt vid första mätningen 2025. Det är ett exceptionellt resultat i en bransch där de stora aktörerna har enorma marknadsbudgetar. Problemet: kundnöjdheten används inte som ett kommersiellt argument.</p>
+
+  <div class="ski-bars" id="ski-bars">
+    <div class="ski-row highlight" data-score="79" data-max="85">
+      <span class="ski-name">Svedea</span>
+      <div class="ski-bar-wrap"><div class="ski-bar-fill svedea-bar"></div></div>
+      <span class="ski-score">79</span>
+    </div>
+    <div class="ski-row" data-score="78" data-max="85">
+      <span class="ski-name">Dina Försäkringar</span>
+      <div class="ski-bar-wrap"><div class="ski-bar-fill"></div></div>
+      <span class="ski-score">78</span>
+    </div>
+    <div class="ski-row" data-score="76" data-max="85">
+      <span class="ski-name">Volvia</span>
+      <div class="ski-bar-wrap"><div class="ski-bar-fill"></div></div>
+      <span class="ski-score">76</span>
+    </div>
+    <div class="ski-row" data-score="74" data-max="85">
+      <span class="ski-name">Länsförsäkringar</span>
+      <div class="ski-bar-wrap"><div class="ski-bar-fill"></div></div>
+      <span class="ski-score">74</span>
+    </div>
+    <div class="ski-row" data-score="73" data-max="85">
+      <span class="ski-name">Gjensidige</span>
+      <div class="ski-bar-wrap"><div class="ski-bar-fill"></div></div>
+      <span class="ski-score">73</span>
+    </div>
+    <div class="ski-row" data-score="72" data-max="85">
+      <span class="ski-name">Moderna</span>
+      <div class="ski-bar-wrap"><div class="ski-bar-fill"></div></div>
+      <span class="ski-score">72</span>
+    </div>
+    <div class="ski-row" data-score="71" data-max="85">
+      <span class="ski-name">Folksam</span>
+      <div class="ski-bar-wrap"><div class="ski-bar-fill"></div></div>
+      <span class="ski-score">71</span>
+    </div>
+    <div class="ski-row" data-score="68" data-max="85">
+      <span class="ski-name">If</span>
+      <div class="ski-bar-wrap"><div class="ski-bar-fill"></div></div>
+      <span class="ski-score">68</span>
+    </div>
+    <div class="ski-row" data-score="67" data-max="85">
+      <span class="ski-name">Trygg-Hansa</span>
+      <div class="ski-bar-wrap"><div class="ski-bar-fill"></div></div>
+      <span class="ski-score">67</span>
+    </div>
+  </div>
+
+  <p style="font-size:0.65rem;color:rgba(255,255,255,0.2);margin-top:2rem;max-width:600px;">Poängen är uppskattade utifrån SKI:s publicerade rankingar och pressmeddelanden 2024/2025. Exakta indexpoäng publiceras inte offentligt. Rankingordningen stämmer: Svedea toppar fordonsförsäkring, Dina Försäkringar toppar sakförsäkring.</p>
+</section>
+
+<div class="divider"></div>
+
+<!-- POSITIONING MAP -->
+<section class="map-section">
+  <p class="section-tag">Konkurrentpositionering</p>
+  <h2 class="section-title">Svedea äger ett unikt utrymme — om de tar det.</h2>
+  <p class="section-intro">Specialistposition med hög kundnöjdhet är sällsynt. De flesta aktörer antingen är stora generalister med medioker kundnöjdhet, eller nischade och okända. Svedea befinner sig i en lucka som borde synas mer.</p>
+
+  <div class="position-map" id="pos-map">
+    <div class="map-axis-x"></div>
+    <div class="map-axis-y"></div>
+    <span class="map-label top">Hög kundnöjdhet</span>
+    <span class="map-label bottom">Låg kundnöjdhet</span>
+    <span class="map-label left">Specialist</span>
+    <span class="map-label right">Generalist</span>
+
+    <!-- dots: left% = specialist-generalist (low=specialist), top% = nöjdhet (low=hög) -->
+    <div class="map-dot svedea" style="left:28%;top:20%;">
+      <div class="map-dot-circle" style="width:20px;height:20px;"></div>
+      <span class="map-dot-label" style="color:#005073;font-weight:600;">Svedea</span>
+    </div>
+    <div class="map-dot" style="left:75%;top:34%;">
+      <div class="map-dot-circle" style="width:28px;height:28px;background:#8899aa;"></div>
+      <span class="map-dot-label">Länsförsäkringar</span>
+    </div>
+    <div class="map-dot" style="left:80%;top:52%;">
+      <div class="map-dot-circle" style="width:24px;height:24px;background:#8899aa;"></div>
+      <span class="map-dot-label">If</span>
+    </div>
+    <div class="map-dot" style="left:78%;top:56%;">
+      <div class="map-dot-circle" style="width:22px;height:22px;background:#8899aa;"></div>
+      <span class="map-dot-label">Trygg-Hansa</span>
+    </div>
+    <div class="map-dot" style="left:72%;top:42%;">
+      <div class="map-dot-circle" style="width:20px;height:20px;background:#8899aa;"></div>
+      <span class="map-dot-label">Folksam</span>
+    </div>
+    <div class="map-dot" style="left:30%;top:28%;">
+      <div class="map-dot-circle" style="width:14px;height:14px;background:#aabbcc;"></div>
+      <span class="map-dot-label">Dina Försäkringar</span>
+    </div>
+    <div class="map-dot" style="left:55%;top:30%;">
+      <div class="map-dot-circle" style="width:12px;height:12px;background:#aabbcc;"></div>
+      <span class="map-dot-label">Volvia</span>
+    </div>
+    <div class="map-dot" style="left:65%;top:25%;">
+      <div class="map-dot-circle" style="width:12px;height:12px;background:#c8d8e8;"></div>
+      <span class="map-dot-label">Hedvig</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CHANNEL ANALYSIS -->
+<section class="channel-section">
+  <p class="section-tag">Kanalanalys</p>
+  <h2 class="section-title">Vad kommunikationen gör idag — och vad den missar.</h2>
+  <p class="section-intro">Baserat på offentlig närvaro: webb, Meta-annonsbiblioteket, Instagram och konkurrentsignaler. En intern genomgång av faktisk konverteringsdata, martech-stack och kundreseflöden skulle ge en mer komplett bild.</p>
+
+  <div class="channel-grid" id="channel-grid">
+    <div class="channel-card">
+      <div class="channel-header">
+        <span class="channel-name">Paid media</span>
+        <span class="channel-badge badge-strong">Mogen setup</span>
+      </div>
+      <div class="channel-meter"><div class="channel-meter-fill" style="background:#2d8c5e;" data-width="78%"></div></div>
+      <p class="channel-note">Ca 150 aktiva annonser simultant i Meta-annonsbiblioteket, segmenterade per produktkategori: Bil, MC, Hund, Katt, Båt, ATV, Hem, Företag. Det är en välstrukturerad och aktiv performance-setup. Budskapen är primärt pris- och produktdrivna — kundnöjdheten lyser däremot med sin frånvaro som argument.</p>
+    </div>
+
+    <div class="channel-card">
+      <div class="channel-header">
+        <span class="channel-name">Community & passion-content</span>
+        <span class="channel-badge badge-ok">Påbörjat</span>
+      </div>
+      <div class="channel-meter"><div class="channel-meter-fill" style="background:#e8a838;" data-width="52%"></div></div>
+      <p class="channel-note">Fyra separata Instagram-konton per segment (hund, katt, mc, jobb) är ett genomtänkt drag. Hundstipendiet och MC-stipendiet är riktiga community-initiativ. Utmaningen: följarvolym är låg relativt innehållsmängd — MC-kontot har 519 inlägg men 1 888 följare — vilket tyder på att räckvidden i hög grad stannar inom den redan konverterade kundbasen.</p>
+    </div>
+
+    <div class="channel-card">
+      <div class="channel-header">
+        <span class="channel-name">Varumärkeskommunikation</span>
+        <span class="channel-badge badge-ok">Delvis aktiverad</span>
+      </div>
+      <div class="channel-meter"><div class="channel-meter-fill" style="background:#e8a838;" data-width="48%"></div></div>
+      <p class="channel-note">SKI-resultaten syns i Google sitelinks och finns på sajten, det är bra och medvetet. Gapet är att argumentet inte lever i de betalda kanalerna, där ca 150 aktiva annonser kör pris- och produktbudskap. Den kund som aldrig söker direkt på Svedea utan möter en Meta-annons eller jämför på Prisjakt, ser aldrig att Svedea toppar kundnöjdhet sex år i rad.</p>
+    </div>
+
+    <div class="channel-card">
+      <div class="channel-header">
+        <span class="channel-name">Webb & SEO</span>
+        <span class="channel-badge badge-ok">Godkänd</span>
+      </div>
+      <div class="channel-meter"><div class="channel-meter-fill" style="background:#e8a838;" data-width="58%"></div></div>
+      <p class="channel-note">Tydlig produktstruktur och bra kategoritäckning. Tips & råd-sektionen är produktdriven men saknar det emotionella lager som bygger SEO-auktoritet och lojalitet över tid. Stor potential att ranka på passion-sökningar kopplade till respektive målgrupp.</p>
+    </div>
+
+    <div class="channel-card">
+      <div class="channel-header">
+        <span class="channel-name">Retention & lojalitet</span>
+        <span class="channel-badge badge-weak">Gap</span>
+      </div>
+      <div class="channel-meter"><div class="channel-meter-fill" style="background:#e74c3c;" data-width="25%"></div></div>
+      <p class="channel-note">Hög kundnöjdhet tyder på att upplevelsen är god — men kommunikation som aktivt bygger lojalitet och driver word-of-mouth syns inte externt. I en abonnemangsdriven affär är retention minst lika viktigt som anskaffning. Nöjda kunder är Svedeas starkaste säljare om de aktiveras rätt.</p>
+    </div>
+
+    <div class="channel-card">
+      <div class="channel-header">
+        <span class="channel-name">AI & automation</span>
+        <span class="channel-badge badge-gap">Outnyttjat</span>
+      </div>
+      <div class="channel-meter"><div class="channel-meter-fill" style="background:#1a7fa8;" data-width="12%"></div></div>
+      <p class="channel-note">Försäkringsbranschen ligger generellt efter i AI-adoption inom marknadsföring. Möjligheterna är konkreta: personaliserad kundkommunikation per segment och säsong, prediktiv churn-hantering och skalbar contentproduktion som matchar de fyra Instagram-kontona utan att kräva fyra gånger så mycket manuellt arbete.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRIORITIES -->
+<section class="opp-section">
+  <p class="section-tag">Tre prioriteringar</p>
+  <h2 class="section-title">Vad jag skulle fokusera på det första halvåret.</h2>
+  <p class="section-intro">Baserat på det som är synligt utifrån. En intern genomgång av data, system och kundresa skulle ge en mer komplett bild — men riktningen pekar åt samma håll.</p>
+
+  <div class="opp-grid" id="opp-grid">
+    <div class="opp-card">
+      <span class="opp-num">1</span>
+      <p class="opp-tag">Varumärke</p>
+      <h3 class="opp-title">Flytta kundnöjdheten från sajt till säljkanal</h3>
+      <p class="opp-text">SKI-resultaten lever på sajten och syns i Google. Nästa steg är att göra dem till ett aktivt argument i de betalda kanalerna, där prisjämförelsen faktiskt sker. En kund som möter "Sveriges nöjdaste kunder 6 år i rad" i ett Meta-flöde fattar ett annat beslut än en som bara ser ett pris.</p>
+    </div>
+
+    <div class="opp-card">
+      <span class="opp-num">2</span>
+      <p class="opp-tag">Community</p>
+      <h3 class="opp-title">Skala räckvidden bortom den befintliga kundbasen</h3>
+      <p class="opp-text">Strukturen finns: segmenterade konton, stipendier, genuint innehåll. Utmaningen är räckvidd. MC-kontot har 519 inlägg men 1 888 följare. Creator-samarbeten och betalda boosts på det bästa community-innehållet kan ta det till en ny publik utan att börja om från noll.</p>
+    </div>
+
+    <div class="opp-card">
+      <span class="opp-num">3</span>
+      <p class="opp-tag">Data & retention</p>
+      <h3 class="opp-title">Koppla ihop brand och konvertering med data</h3>
+      <p class="opp-text">Vilka av de 150 annonserna driver faktiska kunder, inte bara klick? Var i kundresan tappar vi? I en abonnemangsdriven affär är retention minst lika viktigt som anskaffning. AI kan hjälpa till att svara på de frågorna snabbare och mer precist än traditionell rapportering.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <p class="closing-tag">Om analysen</p>
+  <h2>Svedea har redan gjort det svåra. Nu gäller det att ta nästa steg.</h2>
+  <p>Det här är en analys baserad på offentlig information: Meta-annonsbiblioteket, Instagram, Google, SKI-rankingar och konkurrentpositionering. Bilden som växer fram är ett bolag med en stark grund, en mogen paid media-setup och ett genuint community-arbete påbörjat. Gapet är att den starkaste tillgången, kundnöjdheten, ännu inte bär hela kommunikationen.</p>
+  <p style="margin-top:1rem;">En intern genomgång av kunddata, konverteringsflöden och martech-stack skulle ge en mer komplett bild. Det är den genomgången jag ser fram emot att göra.</p>
+
+  <div class="closing-sig">
+    <span class="name">Felicia Sindemark</span>
+    <span class="contact">073-503 50 72 · feliciasindemark@gmail.com</span>
+  </div>
+</section>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+
+    const el = entry.target;
+
+    if (el.id === 'ski-bars') {
+      const rows = el.querySelectorAll('.ski-row');
+      rows.forEach((row, i) => {
+        setTimeout(() => {
+          row.classList.add('visible');
+          const score = parseInt(row.dataset.score);
+          const max = parseInt(row.dataset.max);
+          const fill = row.querySelector('.ski-bar-fill');
+          setTimeout(() => {
+            fill.style.width = (score / max * 100) + '%';
+          }, 50);
+        }, i * 80);
+      });
+      observer.unobserve(el);
+    }
+
+    if (el.id === 'channel-grid') {
+      const cards = el.querySelectorAll('.channel-card');
+      cards.forEach((card, i) => {
+        setTimeout(() => {
+          card.classList.add('visible');
+          const fill = card.querySelector('.channel-meter-fill');
+          setTimeout(() => {
+            fill.style.width = fill.dataset.width;
+          }, 100);
+        }, i * 100);
+      });
+      observer.unobserve(el);
+    }
+
+    if (el.id === 'opp-grid') {
+      const cards = el.querySelectorAll('.opp-card');
+      cards.forEach((card, i) => {
+        setTimeout(() => card.classList.add('visible'), i * 150);
+      });
+      observer.unobserve(el);
+    }
+  });
+}, { threshold: 0.15 });
+
+['ski-bars', 'channel-grid', 'opp-grid'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) observer.observe(el);
+});
+</script>
+</body>
+</html>
